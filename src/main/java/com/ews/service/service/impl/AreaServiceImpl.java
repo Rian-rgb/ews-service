@@ -1,16 +1,15 @@
 package com.ews.service.service.impl;
 
-import com.ews.service.exception.custom.ConflictException;
 import com.ews.service.exception.custom.ConstraintValueException;
 import com.ews.service.exception.custom.NotFoundException;
 import com.ews.service.model.Area;
 import com.ews.service.repository.AreaRepository;
+import com.ews.service.repository.querybuilder.AreaBuilder;
 import com.ews.service.request.area.CreateAreaRequest;
 import com.ews.service.request.area.UpdateAreaRequest;
 import com.ews.service.response.*;
 import com.ews.service.service.AreaService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.QueryException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,16 +19,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AreaServiceImpl implements AreaService {
 
     private final AreaRepository areaRepository;
+
+    private final AreaBuilder areaBuilder;
 
     @Override
     public PaginationResponse<GetAreaResponse> findPage(String name, int page, int size, String sortBy, String sort) {
@@ -43,14 +41,10 @@ public class AreaServiceImpl implements AreaService {
             }
 
             Pageable pageable = PageRequest.of(page -1, size, sortOrder);
-            Page<Area> datas = areaRepository.findPage(name, pageable);
-            List<GetAreaResponse> responses = datas.getContent()
-                    .stream()
-                    .map(area -> new GetAreaResponse(area.getId(), area.getName(), area.getIsActive()))
-                    .toList();
+            Page<GetAreaResponse> datas = areaBuilder.getAreas(name, sortBy, sort, pageable);
 
             return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                    responses, datas.getNumber(), datas.getSize(), datas.getTotalElements(),
+                    datas.getContent(), datas.getNumber(), datas.getSize(), datas.getTotalElements(),
                     datas.getTotalPages(), datas.isLast());
 
         } catch (Exception e) {
@@ -141,5 +135,10 @@ public class AreaServiceImpl implements AreaService {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    @Override
+    public DataResponse<GetAreaResponse> findListArea(String name, int page) {
+        return null;
     }
 }
