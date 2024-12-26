@@ -1,4 +1,4 @@
-package com.ews.service.response;
+package com.ews.service.response.area;
 
 import lombok.Builder;
 import lombok.Data;
@@ -10,4 +10,5 @@ public class CreateAreaResponse {
     private String name;
 
     private Byte isActive;
+
 }

@@ -3,6 +3,10 @@ package com.ews.service.controller;
 import com.ews.service.request.area.CreateAreaRequest;
 import com.ews.service.request.area.UpdateAreaRequest;
 import com.ews.service.response.*;
+import com.ews.service.response.area.CreateAreaResponse;
+import com.ews.service.response.area.GetAreaResponse;
+import com.ews.service.response.area.GetListSegmentForReportResponse;
+import com.ews.service.response.area.UpdateAreaResponse;
 import com.ews.service.service.AreaService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -31,7 +35,7 @@ public class AreaController {
         return ResponseEntity.ok(areaService.index(name, page, limit, sortBy, sort));
     }
 
-    @PostMapping("/create")
+    @PostMapping("/store")
     public ResponseEntity<DataResponse<CreateAreaResponse>> create(@RequestBody @Valid CreateAreaRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(areaService.create(request));
     }

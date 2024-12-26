@@ -1,4 +1,4 @@
-package com.ews.service.response;
+package com.ews.service.response.area;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +14,9 @@ import java.util.UUID;
 public class GetAreaResponse {
 
     private UUID id;
+
     private String name;
+
     private Byte isActive;
+
 }

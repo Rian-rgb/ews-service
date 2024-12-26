@@ -1,4 +1,4 @@
-package com.ews.service.request.area;
+package com.ews.service.request.objectcategory;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,11 +14,14 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateAreaRequest {
+public class UpdateObjectCategoryRequest {
 
-    @NotBlank(message = "Nama Bidang harus diisi")
-    @Size(min = 1, max = 100, message = "Nama Bidang harus antara 1 hingga 100 karakter")
+    @NotBlank(message = "Nama Kategori Objek harus diisi")
+    @Size(min = 1, max = 100, message = "Nama Kategori harus antara 1 hingga 100 karakter")
     private String name;
+
+    @NotNull(message = "areaId harus diisi")
+    private UUID areaId;
 
     @NotNull(message = "Status harus diisi")
     private Byte isActive;

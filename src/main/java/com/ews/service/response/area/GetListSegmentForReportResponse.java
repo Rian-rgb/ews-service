@@ -1,4 +1,4 @@
-package com.ews.service.response;
+package com.ews.service.response.area;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +14,7 @@ import java.util.UUID;
 public class GetListSegmentForReportResponse {
 
     private String id;
+
     private String text;
+
 }

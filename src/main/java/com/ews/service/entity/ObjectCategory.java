@@ -1,4 +1,4 @@
-package com.ews.service.model;
+package com.ews.service.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,8 +16,8 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "areas")
-public class Area {
+@Table(name = "object_categories")
+public class ObjectCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,5 +37,9 @@ public class Area {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "area_id", referencedColumnName="id")
+    private Area area;
 
 }

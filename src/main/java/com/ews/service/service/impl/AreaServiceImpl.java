@@ -2,12 +2,16 @@ package com.ews.service.service.impl;
 
 import com.ews.service.exception.custom.ConstraintValueException;
 import com.ews.service.exception.custom.NotFoundException;
-import com.ews.service.model.Area;
+import com.ews.service.entity.Area;
 import com.ews.service.repository.AreaRepository;
-import com.ews.service.repository.querybuilder.AreaBuilder;
+import com.ews.service.repository.spesification.AreaSpesification;
 import com.ews.service.request.area.CreateAreaRequest;
 import com.ews.service.request.area.UpdateAreaRequest;
 import com.ews.service.response.*;
+import com.ews.service.response.area.CreateAreaResponse;
+import com.ews.service.response.area.GetAreaResponse;
+import com.ews.service.response.area.GetListSegmentForReportResponse;
+import com.ews.service.response.area.UpdateAreaResponse;
 import com.ews.service.service.AreaService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
@@ -26,10 +30,10 @@ public class AreaServiceImpl implements AreaService {
 
     private final AreaRepository areaRepository;
 
-    private final AreaBuilder areaBuilder;
+    private final AreaSpesification areaSpesification;
 
     @Override
-    public PaginationResponse<GetAreaResponse> index(String name, int page, int size, String sortBy, String sort) {
+    public PaginationResponse<GetAreaResponse> index(String name, int page, int limit, String sortBy, String sort) {
         try {
 
             String[] allowedOrder = {"createdAt"};
@@ -39,14 +43,15 @@ public class AreaServiceImpl implements AreaService {
                         ? Sort.by(Sort.Direction.ASC, sortBy) : Sort.by(Sort.Direction.DESC, sort);
             }
 
-            Pageable pageable = PageRequest.of(page -1, size, sortOrder);
-            Page<Area> areas = areaBuilder.getPageAreasFilterByLikeName(name, sortBy, sort, pageable);
+            Pageable pageable = PageRequest.of(page -1, limit, sortOrder);
+            Page<Area> areas = areaSpesification.getPageFilterByLikeName(name, sortBy, sort, pageable);
 
             Page<GetAreaResponse> responses = areas.map(area ->
                     new GetAreaResponse(area.getId(), area.getName(), area.getIsActive()));
 
             return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                    responses.getContent(), responses.getNumber() + 1, responses.getSize(), responses.getTotalElements(),
+                    responses.getContent(), responses.getNumber() + 1,
+                    responses.getSize(), responses.getTotalElements(),
                     responses.getTotalPages(), responses.isLast());
 
         } catch (Exception e) {
@@ -111,8 +116,7 @@ public class AreaServiceImpl implements AreaService {
 
         } catch (Exception e) {
             if (e instanceof ConstraintViolationException){
-                Area area = areaRepository.findById(id).orElse(null);
-                throw new ConstraintValueException("Data " + area.getName() + " ini tidak bisa dihapus karena digunakan " +
+                throw new ConstraintValueException("Data Bidang ini tidak bisa dihapus karena digunakan " +
                         "oleh Risk Event yang memiliki issue");
             }
             throw e;
@@ -141,43 +145,51 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public PaginationResponse<GetAreaResponse> getListArea(String name, int page) {
+        try {
 
-        Sort sortOrder = Sort.by(Sort.Direction.ASC, "name");
-        Pageable pageable = PageRequest.of(page -1, 10, sortOrder);
-        Page<Area> areas = areaBuilder.getPageAreasFilterByLikeName(name, "name", "asc", pageable);
-        Page<GetAreaResponse> responses = areas.map(area ->
-                new GetAreaResponse(area.getId(), area.getName(), area.getIsActive()));
+            Sort sortOrder = Sort.by(Sort.Direction.ASC, "name");
+            Pageable pageable = PageRequest.of(page -1, 10, sortOrder);
+            Page<Area> areas = areaSpesification.getPageFilterByLikeNameAndStatusActive(name, "name", "asc", pageable);
+            Page<GetAreaResponse> responses = areas.map(area ->
+                    new GetAreaResponse(area.getId(), area.getName(), area.getIsActive()));
 
-        return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                responses.getContent(), responses.getNumber(), responses.getSize(), responses.getTotalElements(),
-                responses.getTotalPages(), responses.isLast());
+            return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
+                    responses.getContent(), responses.getNumber(), responses.getSize(), responses.getTotalElements(),
+                    responses.getTotalPages(), responses.isLast());
 
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
     public PaginationResponse<GetListSegmentForReportResponse> getListSegmentForReport(String name, int emptyValue, int page) {
+        try {
 
-        Sort sortOrder = Sort.by(Sort.Direction.ASC, "createdAt");
-        Pageable pageable = PageRequest.of(page -1, 10, sortOrder);
-        Page<Area> areas = areaBuilder.getPageAreasFilterByLikeName(name, "createdAt", "asc", pageable);
+            Sort sortOrder = Sort.by(Sort.Direction.ASC, "createdAt");
+            Pageable pageable = PageRequest.of(page - 1, 10, sortOrder);
+            Page<Area> areas = areaSpesification.getPageFilterByLikeNameAndStatusActive(name, "createdAt", "asc", pageable);
 
-        Page<GetListSegmentForReportResponse> responses = areas.map(area ->
-                new GetListSegmentForReportResponse(area.getId().toString(), area.getName()));
-        List<GetListSegmentForReportResponse> responseList = new ArrayList<>(responses.getContent());
+            Page<GetListSegmentForReportResponse> responses = areas.map(area ->
+                    new GetListSegmentForReportResponse(area.getId().toString(), area.getName()));
+            List<GetListSegmentForReportResponse> responseList = new ArrayList<>(responses.getContent());
 
-        if (name == null && page == 1) {
+            if (name == null && page == 1) {
 
-            responseList.add(new GetListSegmentForReportResponse("all", "Semua"));
+                responseList.add(new GetListSegmentForReportResponse("all", "Semua"));
 
-            if (emptyValue == 1) {
-                responseList.add(new GetListSegmentForReportResponse("", "Tidak Dipilih"));
+                if (emptyValue == 1) {
+                    responseList.add(new GetListSegmentForReportResponse("", "Tidak Dipilih"));
+                }
+
             }
 
+            return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
+                    responseList, responses.getNumber(), responses.getSize(), responses.getTotalElements(),
+                    responses.getTotalPages(), responses.isLast());
+
+        } catch (Exception e) {
+            throw e;
         }
-
-        return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                responseList, responses.getNumber(), responses.getSize(), responses.getTotalElements(),
-                responses.getTotalPages(), responses.isLast());
-
     }
 }
