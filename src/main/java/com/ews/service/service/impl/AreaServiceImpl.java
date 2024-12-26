@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class AreaServiceImpl implements AreaService {
     private final AreaRepository areaRepository;
 
     @Override
-    public PaginationResponse<Area> findPage(String name, int page, int size, String sortBy, String sort) {
+    public PaginationResponse<GetAreaResponse> findPage(String name, int page, int size, String sortBy, String sort) {
         try {
 
             String[] allowedOrder = {"createdAt"};
@@ -43,9 +44,13 @@ public class AreaServiceImpl implements AreaService {
 
             Pageable pageable = PageRequest.of(page -1, size, sortOrder);
             Page<Area> datas = areaRepository.findPage(name, pageable);
+            List<GetAreaResponse> responses = datas.getContent()
+                    .stream()
+                    .map(area -> new GetAreaResponse(area.getId(), area.getName(), area.getIsActive()))
+                    .toList();
 
             return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                    datas.getContent(), datas.getNumber(), datas.getSize(), datas.getTotalElements(),
+                    responses, datas.getNumber(), datas.getSize(), datas.getTotalElements(),
                     datas.getTotalPages(), datas.isLast());
 
         } catch (Exception e) {
@@ -114,6 +119,26 @@ public class AreaServiceImpl implements AreaService {
                 throw new ConstraintValueException("Data " + area.getName() + " ini tidak bisa dihapus karena digunakan " +
                         "oleh Risk Event yang memiliki issue");
             }
+            throw e;
+        }
+    }
+
+    @Override
+    public DataResponse<GetAreaResponse> findById(UUID id) {
+        try {
+
+            Area existingArea = areaRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Area tidak ditemukan dengan id: " + id));
+
+            GetAreaResponse response = GetAreaResponse.builder()
+                    .id(existingArea.getId())
+                    .name(existingArea.getName())
+                    .isActive(existingArea.getIsActive())
+                    .build();
+
+            return new DataResponse<>(HttpStatus.OK.value(), "Success", response);
+
+        } catch (Exception e) {
             throw e;
         }
     }

@@ -9,12 +9,14 @@ import java.util.UUID;
 
 public interface AreaService {
 
-    PaginationResponse<Area> findPage(String name, int page, int size, String sortBy, String sort);
+    PaginationResponse<GetAreaResponse> findPage(String name, int page, int size, String sortBy, String sort);
 
     DataResponse<CreateAreaResponse> create(CreateAreaRequest request);
 
     DataResponse<UpdateAreaResponse> update(UUID id, UpdateAreaRequest request);
 
     DataResponse<Object> deleteById(UUID id);
+
+    DataResponse<GetAreaResponse> findById(UUID id);
 
 }

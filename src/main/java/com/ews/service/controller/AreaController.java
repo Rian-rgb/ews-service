@@ -22,7 +22,7 @@ public class AreaController {
     private final AreaService areaService;
 
     @GetMapping
-    public ResponseEntity<PaginationResponse<Area>> findPage(
+    public ResponseEntity<PaginationResponse<GetAreaResponse>> findPage(
             @RequestParam(defaultValue = "1") @Min(1) int page,
             @RequestParam(defaultValue = "10") @Min(1) int limit,
             @RequestParam(defaultValue = "createdAt", required = false) String sortBy,
@@ -47,5 +47,10 @@ public class AreaController {
     @DeleteMapping("/destroy/{id}")
     public ResponseEntity<DataResponse<Object>> deleteById(@PathVariable UUID id) {
         return ResponseEntity.ok(areaService.deleteById(id));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DataResponse<GetAreaResponse>> findById(@PathVariable UUID id) {
+        return ResponseEntity.ok(areaService.findById(id));
     }
 }
