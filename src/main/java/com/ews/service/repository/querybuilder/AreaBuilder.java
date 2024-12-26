@@ -2,7 +2,6 @@ package com.ews.service.repository.querybuilder;
 
 import com.ews.service.model.Area;
 import com.ews.service.repository.AreaRepository;
-import com.ews.service.response.GetAreaResponse;
 import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,8 @@ public class AreaBuilder {
     @Autowired
     private AreaRepository areaRepository;
 
-    public Page<GetAreaResponse> getAreas(String name, String sortField,
-                                          String sortBy, Pageable pageable) {
+    public Page<Area> getPageAreasFilterByLikeName(String name, String sortField,
+                                                   String sortBy, Pageable pageable) {
 
         Specification<Area> spec = (root, query, criteriaBuilder) -> {
 
@@ -42,8 +41,7 @@ public class AreaBuilder {
             return query.getRestriction();
         };
 
-        Page<Area> result = areaRepository.findAll(spec, pageable);
-        return result.map(area -> new GetAreaResponse(area.getId(), area.getName(), area.getIsActive()));
+        return areaRepository.findAll(spec, pageable);
 
     }
 

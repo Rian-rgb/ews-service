@@ -18,8 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class AreaServiceImpl implements AreaService {
     private final AreaBuilder areaBuilder;
 
     @Override
-    public PaginationResponse<GetAreaResponse> findPage(String name, int page, int size, String sortBy, String sort) {
+    public PaginationResponse<GetAreaResponse> index(String name, int page, int size, String sortBy, String sort) {
         try {
 
             String[] allowedOrder = {"createdAt"};
@@ -41,11 +40,14 @@ public class AreaServiceImpl implements AreaService {
             }
 
             Pageable pageable = PageRequest.of(page -1, size, sortOrder);
-            Page<GetAreaResponse> datas = areaBuilder.getAreas(name, sortBy, sort, pageable);
+            Page<Area> areas = areaBuilder.getPageAreasFilterByLikeName(name, sortBy, sort, pageable);
+
+            Page<GetAreaResponse> responses = areas.map(area ->
+                    new GetAreaResponse(area.getId(), area.getName(), area.getIsActive()));
 
             return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                    datas.getContent(), datas.getNumber() + 1, datas.getSize(), datas.getTotalElements(),
-                    datas.getTotalPages(), datas.isLast());
+                    responses.getContent(), responses.getNumber() + 1, responses.getSize(), responses.getTotalElements(),
+                    responses.getTotalPages(), responses.isLast());
 
         } catch (Exception e) {
             throw e;
@@ -118,7 +120,7 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public DataResponse<GetAreaResponse> findById(UUID id) {
+    public DataResponse<GetAreaResponse> getById(UUID id) {
         try {
 
             Area existingArea = areaRepository.findById(id)
@@ -138,14 +140,44 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public PaginationResponse<GetAreaResponse> findListArea(String name, int page) {
+    public PaginationResponse<GetAreaResponse> getListArea(String name, int page) {
 
         Sort sortOrder = Sort.by(Sort.Direction.ASC, "name");
         Pageable pageable = PageRequest.of(page -1, 10, sortOrder);
-        Page<GetAreaResponse> datas = areaBuilder.getAreas(name, "name", "asc", pageable);
+        Page<Area> areas = areaBuilder.getPageAreasFilterByLikeName(name, "name", "asc", pageable);
+        Page<GetAreaResponse> responses = areas.map(area ->
+                new GetAreaResponse(area.getId(), area.getName(), area.getIsActive()));
 
         return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                datas.getContent(), datas.getNumber(), datas.getSize(), datas.getTotalElements(),
-                datas.getTotalPages(), datas.isLast());
+                responses.getContent(), responses.getNumber(), responses.getSize(), responses.getTotalElements(),
+                responses.getTotalPages(), responses.isLast());
+
+    }
+
+    @Override
+    public PaginationResponse<GetListSegmentForReportResponse> getListSegmentForReport(String name, int emptyValue, int page) {
+
+        Sort sortOrder = Sort.by(Sort.Direction.ASC, "createdAt");
+        Pageable pageable = PageRequest.of(page -1, 10, sortOrder);
+        Page<Area> areas = areaBuilder.getPageAreasFilterByLikeName(name, "createdAt", "asc", pageable);
+
+        Page<GetListSegmentForReportResponse> responses = areas.map(area ->
+                new GetListSegmentForReportResponse(area.getId().toString(), area.getName()));
+        List<GetListSegmentForReportResponse> responseList = new ArrayList<>(responses.getContent());
+
+        if (name == null && page == 1) {
+
+            responseList.add(new GetListSegmentForReportResponse("all", "Semua"));
+
+            if (emptyValue == 1) {
+                responseList.add(new GetListSegmentForReportResponse("", "Tidak Dipilih"));
+            }
+
+        }
+
+        return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
+                responseList, responses.getNumber(), responses.getSize(), responses.getTotalElements(),
+                responses.getTotalPages(), responses.isLast());
+
     }
 }

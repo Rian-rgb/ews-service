@@ -1,6 +1,5 @@
 package com.ews.service.controller;
 
-import com.ews.service.model.Area;
 import com.ews.service.request.area.CreateAreaRequest;
 import com.ews.service.request.area.UpdateAreaRequest;
 import com.ews.service.response.*;
@@ -22,14 +21,14 @@ public class AreaController {
     private final AreaService areaService;
 
     @GetMapping
-    public ResponseEntity<PaginationResponse<GetAreaResponse>> findPage(
+    public ResponseEntity<PaginationResponse<GetAreaResponse>> index(
             @RequestParam(defaultValue = "1") @Min(1) int page,
             @RequestParam(defaultValue = "10") @Min(1) int limit,
             @RequestParam(defaultValue = "createdAt", required = false) String sortBy,
             @RequestParam(defaultValue = "ASC", required = false) String sort,
             @RequestParam(required = false) String name
     ) {
-        return ResponseEntity.ok(areaService.findPage(name, page, limit, sortBy, sort));
+        return ResponseEntity.ok(areaService.index(name, page, limit, sortBy, sort));
     }
 
     @PostMapping("/create")
@@ -50,15 +49,24 @@ public class AreaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DataResponse<GetAreaResponse>> findById(@PathVariable UUID id) {
-        return ResponseEntity.ok(areaService.findById(id));
+    public ResponseEntity<DataResponse<GetAreaResponse>> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(areaService.getById(id));
     }
 
     @GetMapping("/area/list")
-    public ResponseEntity<PaginationResponse<GetAreaResponse>> findListArea(
+    public ResponseEntity<PaginationResponse<GetAreaResponse>> getListArea(
             @RequestParam(value = "term", required = false) String name,
             @RequestParam(defaultValue = "1") @Min(1) int page
     ) {
-        return ResponseEntity.ok(areaService.findListArea(name, page));
+        return ResponseEntity.ok(areaService.getListArea(name, page));
+    }
+
+    @GetMapping("/list-segment")
+    public ResponseEntity<PaginationResponse<GetListSegmentForReportResponse>> getListSegmentForReport(
+            @RequestParam(value = "term", required = false) String name,
+            @RequestParam(defaultValue = "0") @Min(0) int emptyValue,
+            @RequestParam(defaultValue = "1") @Min(1) int page
+    ) {
+        return ResponseEntity.ok(areaService.getListSegmentForReport(name, emptyValue, page));
     }
 }

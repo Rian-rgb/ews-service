@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface AreaService {
 
-    PaginationResponse<GetAreaResponse> findPage(String name, int page, int size, String sortBy, String sort);
+    PaginationResponse<GetAreaResponse> index(String name, int page, int size, String sortBy, String sort);
 
     DataResponse<CreateAreaResponse> create(CreateAreaRequest request);
 
@@ -16,8 +16,11 @@ public interface AreaService {
 
     DataResponse<Object> deleteById(UUID id);
 
-    DataResponse<GetAreaResponse> findById(UUID id);
+    DataResponse<GetAreaResponse> getById(UUID id);
 
-    PaginationResponse<GetAreaResponse> findListArea(String name, int page);
+    PaginationResponse<GetAreaResponse> getListArea(String name, int page);
+
+    PaginationResponse<GetListSegmentForReportResponse> getListSegmentForReport(String name, int emptyValue, int page);
+
 
 }
