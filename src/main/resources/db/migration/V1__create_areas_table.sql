@@ -1,4 +1,4 @@
-CREATE TABLE Areas (
+CREATE TABLE areas (
     id RAW(16) DEFAULT SYS_GUID() PRIMARY KEY,
     name NVARCHAR2(100),
     is_active NUMBER(3),
