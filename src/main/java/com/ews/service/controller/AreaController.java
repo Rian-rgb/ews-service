@@ -53,4 +53,12 @@ public class AreaController {
     public ResponseEntity<DataResponse<GetAreaResponse>> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(areaService.findById(id));
     }
+
+    @GetMapping("/area/list")
+    public ResponseEntity<PaginationResponse<GetAreaResponse>> findListArea(
+            @RequestParam(value = "term", required = false) String name,
+            @RequestParam(defaultValue = "1") @Min(1) int page
+    ) {
+        return ResponseEntity.ok(areaService.findListArea(name, page));
+    }
 }

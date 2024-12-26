@@ -44,7 +44,7 @@ public class AreaServiceImpl implements AreaService {
             Page<GetAreaResponse> datas = areaBuilder.getAreas(name, sortBy, sort, pageable);
 
             return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                    datas.getContent(), datas.getNumber(), datas.getSize(), datas.getTotalElements(),
+                    datas.getContent(), datas.getNumber() + 1, datas.getSize(), datas.getTotalElements(),
                     datas.getTotalPages(), datas.isLast());
 
         } catch (Exception e) {
@@ -138,7 +138,14 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public DataResponse<GetAreaResponse> findListArea(String name, int page) {
-        return null;
+    public PaginationResponse<GetAreaResponse> findListArea(String name, int page) {
+
+        Sort sortOrder = Sort.by(Sort.Direction.ASC, "name");
+        Pageable pageable = PageRequest.of(page -1, 10, sortOrder);
+        Page<GetAreaResponse> datas = areaBuilder.getAreas(name, "name", "asc", pageable);
+
+        return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
+                datas.getContent(), datas.getNumber(), datas.getSize(), datas.getTotalElements(),
+                datas.getTotalPages(), datas.isLast());
     }
 }

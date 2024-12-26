@@ -18,8 +18,6 @@ public interface AreaService {
 
     DataResponse<GetAreaResponse> findById(UUID id);
 
-    DataResponse<GetAreaResponse> findListArea(String name, int page);
-
-
+    PaginationResponse<GetAreaResponse> findListArea(String name, int page);
 
 }
