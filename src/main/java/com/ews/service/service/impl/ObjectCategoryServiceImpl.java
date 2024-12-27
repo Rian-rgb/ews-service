@@ -49,7 +49,7 @@ public class ObjectCategoryServiceImpl implements ObjectCategoryService {
             Sort sortOrder = Sort.by(Sort.Direction.ASC, "createdAt");
             if ( Arrays.asList(allowedOrder).contains(sortBy) ) {
                 sortOrder = sort.equalsIgnoreCase("ASC")
-                        ? Sort.by(Sort.Direction.ASC, sortBy) : Sort.by(Sort.Direction.DESC, sort);
+                        ? Sort.by(Sort.Direction.ASC, sortBy) : Sort.by(Sort.Direction.DESC, sortBy);
             }
 
             Pageable pageable = PageRequest.of(page -1, limit, sortOrder);
@@ -144,7 +144,7 @@ public class ObjectCategoryServiceImpl implements ObjectCategoryService {
         try {
 
             objectCategoryRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Area tidak ditemukan dengan id: " + id));
+                    .orElseThrow(() -> new NotFoundException("Object Kategori tidak ditemukan dengan id: " + id));
 
             objectCategoryRepository.deleteById(id);
 

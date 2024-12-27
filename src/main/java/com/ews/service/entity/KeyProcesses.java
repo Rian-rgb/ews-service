@@ -16,8 +16,8 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "areas")
-public class Area {
+@Table(name = "key_processes")
+public class KeyProcesses {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,5 +37,9 @@ public class Area {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "object_category_id", referencedColumnName="id")
+    private ObjectCategory objectCategory;
 
 }

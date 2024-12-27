@@ -40,7 +40,7 @@ public class AreaServiceImpl implements AreaService {
             Sort sortOrder = Sort.by(Sort.Direction.ASC, "createdAt");
             if ( Arrays.asList(allowedOrder).contains(sortBy) ) {
                 sortOrder = sort.equalsIgnoreCase("ASC")
-                        ? Sort.by(Sort.Direction.ASC, sortBy) : Sort.by(Sort.Direction.DESC, sort);
+                        ? Sort.by(Sort.Direction.ASC, sortBy) : Sort.by(Sort.Direction.DESC, sortBy);
             }
 
             Pageable pageable = PageRequest.of(page -1, limit, sortOrder);

@@ -24,10 +24,10 @@ public class ObjectCategory {
     @Column(name = "id", columnDefinition = "uniqueidentifier")
     private UUID id;
 
-    @Column(name = "name", columnDefinition = "nvarchar(100)")
+    @Column(name = "name", columnDefinition = "nvarchar(100)", nullable = false)
     private String name;
 
-    @Column(name = "is_active", columnDefinition = "tinyint")
+    @Column(name = "is_active", columnDefinition = "tinyint", nullable = false)
     private Byte isActive;
 
     @CreationTimestamp

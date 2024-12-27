@@ -59,7 +59,7 @@ public class ObjectCategoryController {
     }
 
     @GetMapping("/area/list")
-    public ResponseEntity<PaginationResponse<GetObjectCategoryResponse>> getListArea(
+    public ResponseEntity<PaginationResponse<GetObjectCategoryResponse>> getListObjectCategory(
             @RequestParam(value = "term", required = false) String name,
             @RequestParam(defaultValue = "1") @Min(1) int page
     ) {
@@ -67,7 +67,7 @@ public class ObjectCategoryController {
     }
 
     @GetMapping("/list-object_category")
-    public ResponseEntity<PaginationResponse<GetListObjectForReportResponse>> getListSegmentForReport(
+    public ResponseEntity<PaginationResponse<GetListObjectForReportResponse>> getListObjectForReport(
             @RequestParam(value = "term", required = false) String name,
             @RequestParam(defaultValue = "0") @Min(0) int emptyValue,
             @RequestParam(defaultValue = "1") @Min(1) int page,
