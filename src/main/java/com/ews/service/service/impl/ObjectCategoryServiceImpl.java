@@ -170,7 +170,7 @@ public class ObjectCategoryServiceImpl implements ObjectCategoryService {
                     .getPageFilterByLikeNameAndStatusActive(name, "name", "asc", pageable);
 
             return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                    responses.getContent(), responses.getNumber(), responses.getSize(), responses.getTotalElements(),
+                    responses.getContent(), responses.getNumber() + 1, responses.getSize(), responses.getTotalElements(),
                     responses.getTotalPages(), responses.isLast());
 
         } catch (Exception e) {
@@ -202,7 +202,7 @@ public class ObjectCategoryServiceImpl implements ObjectCategoryService {
             }
 
             return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                    responseList, responses.getNumber(), responses.getSize(), responses.getTotalElements(),
+                    responseList, responses.getNumber() + 1, responses.getSize(), responses.getTotalElements(),
                     responses.getTotalPages(), responses.isLast());
 
         } catch (Exception e) {

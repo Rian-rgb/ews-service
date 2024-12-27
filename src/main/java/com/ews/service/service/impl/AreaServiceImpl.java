@@ -154,7 +154,7 @@ public class AreaServiceImpl implements AreaService {
                     new GetAreaResponse(area.getId(), area.getName(), area.getIsActive()));
 
             return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                    responses.getContent(), responses.getNumber(), responses.getSize(), responses.getTotalElements(),
+                    responses.getContent(), responses.getNumber() + 1, responses.getSize(), responses.getTotalElements(),
                     responses.getTotalPages(), responses.isLast());
 
         } catch (Exception e) {
@@ -185,7 +185,7 @@ public class AreaServiceImpl implements AreaService {
             }
 
             return new PaginationResponse<>(HttpStatus.OK.value(), "Success",
-                    responseList, responses.getNumber(), responses.getSize(), responses.getTotalElements(),
+                    responseList, responses.getNumber() + 1, responses.getSize(), responses.getTotalElements(),
                     responses.getTotalPages(), responses.isLast());
 
         } catch (Exception e) {
