@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class CreateAreaRequest {
 
     @NotBlank(message = "Name harus diisi")
-    @Size(min = 1, max = 100, message = "Name harus antara 1 hingga 100 karakter")
+    @Size(min = 1, max = 100, message = "Name tidak boleh lebih dari 100 karakter")
     private String name;
 
 }
