@@ -4,7 +4,7 @@ CREATE TABLE key_processes (
     is_active NUMBER(3) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    object_category_id RAW(36),
+    object_category_id RAW(36) NOT NULL,
     CONSTRAINT key_processes_object_category_id_foreign FOREIGN KEY (object_category_id) REFERENCES object_categories(id)
 );
 

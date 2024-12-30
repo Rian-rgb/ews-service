@@ -4,7 +4,7 @@ CREATE TABLE object_categories (
     is_active NUMBER(3) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    area_id RAW(36),
+    area_id RAW(36) NOT NULL,
     CONSTRAINT object_categories_area_id_foreign FOREIGN KEY (area_id) REFERENCES areas(id)
 );
 

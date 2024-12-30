@@ -5,7 +5,7 @@ CREATE TABLE risks (
     is_active NUMBER(3) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    key_process_id RAW(36),
+    key_process_id RAW(36) NOT NULL,
     CONSTRAINT risks_key_process_id_foreign FOREIGN KEY (key_process_id) REFERENCES key_processes(id),
     risk_status_id RAW(36),
     CONSTRAINT risks_risk_status_id_foreign FOREIGN KEY (risk_status_id) REFERENCES risk_statuses(id),
