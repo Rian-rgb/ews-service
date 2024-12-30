@@ -16,8 +16,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CreateObjectCategoryRequest {
 
-    @NotBlank(message = "Nama Kategori Objek harus diisi")
-    @Size(min = 1, max = 100, message = "Nama Kategori harus antara 1 hingga 100 karakter")
+    @NotBlank(message = "Name harus diisi")
+    @Size(min = 1, max = 100, message = "Name harus antara 1 hingga 100 karakter")
     private String name;
 
     @NotNull(message = "areaId harus diisi")

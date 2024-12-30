@@ -16,11 +16,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UpdateAreaRequest {
 
-    @NotBlank(message = "Nama Bidang harus diisi")
-    @Size(min = 1, max = 100, message = "Nama Bidang harus antara 1 hingga 100 karakter")
+    @NotBlank(message = "Name harus diisi")
+    @Size(min = 1, max = 100, message = "Name harus antara 1 hingga 100 karakter")
     private String name;
 
-    @NotNull(message = "Status harus diisi")
+    @NotNull(message = "isActive harus diisi")
     private Byte isActive;
 
 }
