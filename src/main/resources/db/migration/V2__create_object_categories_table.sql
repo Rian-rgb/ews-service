@@ -4,8 +4,8 @@ CREATE TABLE object_categories (
     is_active NUMBER(3) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    area_id RAW(16),
-    CONSTRAINT fk_area FOREIGN KEY (area_id) REFERENCES areas(id)
+    area_id RAW(36),
+    CONSTRAINT object_categories_area_id_foreign FOREIGN KEY (area_id) REFERENCES areas(id)
 );
 
 -- Index untuk kolom is_active
